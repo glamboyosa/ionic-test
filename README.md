@@ -8,7 +8,7 @@
 Clone the repo via:
 
 ```bash
-git clone https://github.com/glamboyosa/ionic-test.git
+git clone https://github.com/tru-ID/ionic-plugin-example-app.git
 ```
 
 Create a new tru.ID project in the root directory via:
