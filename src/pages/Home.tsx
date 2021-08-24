@@ -21,7 +21,7 @@ const Home: React.FC = () => {
   const [match, setMatch] = useState('');
   const [details, setDetails] = useState('');
   const [loading, setLoading] = useState(false);
-  const BASE_URL = '<YOUR_LOCAL_TUNNEL_URL>';
+  const BASE_URL = '<YOUR_LOCALTUNNEL_URL>';
 
   const [present] = useIonAlert();
 
@@ -44,6 +44,7 @@ const Home: React.FC = () => {
       });
     }
   }, [match, present]);
+
   const submitHandler = async () => {
     const body = JSON.stringify({ phone_number: phoneNumber });
     console.log(body);
@@ -57,19 +58,21 @@ const Home: React.FC = () => {
         body,
       });
 
-      const resp: { data: { checkId: string; checkUrl: string } } =
+      const resp: { data: { check_id: string; check_url: string } } =
         await response.json();
 
       console.log('Server response is: ', resp);
 
-      const isChecked = await TruPluginIonicCapacitor.check(resp.data.checkUrl);
+      const isChecked = await TruPluginIonicCapacitor.check(
+        resp.data.check_url
+      );
 
       console.log(isChecked);
       console.log('isChecked (check) Result', isChecked.result);
       setChecked(JSON.stringify(isChecked));
 
       const phoneCheckResponse = await fetch(
-        `${BASE_URL}/phone-check?check_id=${resp.data.checkId}`,
+        `${BASE_URL}/phone-check?check_id=${resp.data.check_id}`,
         {
           headers: {
             'Content-Type': 'application/json',
