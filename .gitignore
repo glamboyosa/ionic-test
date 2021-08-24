@@ -27,4 +27,5 @@ yarn-error.log*
 # Optional eslint cache
 .eslintcache
 
-tru.json
+
+**tru.json
