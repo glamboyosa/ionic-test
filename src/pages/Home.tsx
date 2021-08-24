@@ -8,8 +8,9 @@ import {
   IonTitle,
   IonToolbar,
   IonSpinner,
+  useIonAlert,
 } from '@ionic/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Home.css';
 
 import { TruPluginIonicCapacitor } from 'glamboytest';
@@ -22,6 +23,27 @@ const Home: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const BASE_URL = '<YOUR_LOCAL_TUNNEL_URL>';
 
+  const [present] = useIonAlert();
+
+  useEffect(() => {
+    if (match === 'true') {
+      present({
+        cssClass: 'alert-style',
+        header: 'Success!',
+        message: 'PhoneCheck Verification successful.',
+        buttons: ['Cancel', { text: 'Got It!' }],
+        onDidDismiss: (e) => console.log('Alert Hook dismissed'),
+      });
+    } else if (match === 'false') {
+      present({
+        cssClass: 'alert-style',
+        header: 'Something went wrong.',
+        message: 'PhoneCheck verification unsuccessful.',
+        buttons: ['Cancel', { text: 'Got It!' }],
+        onDidDismiss: (e) => console.log('Alert Hook dismissed'),
+      });
+    }
+  }, [match, present]);
   const submitHandler = async () => {
     const body = JSON.stringify({ phone_number: phoneNumber });
     console.log(body);
@@ -47,7 +69,12 @@ const Home: React.FC = () => {
       setChecked(JSON.stringify(isChecked));
 
       const phoneCheckResponse = await fetch(
-        `${BASE_URL}/phone-check?check_id=${resp.data.checkId}`
+        `${BASE_URL}/phone-check?check_id=${resp.data.checkId}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
       );
 
       const phoneCheckResult: { data: { match: boolean } } =
@@ -65,6 +92,13 @@ const Home: React.FC = () => {
     } catch (e) {
       setLoading(false);
       console.log(JSON.stringify(e));
+      present({
+        cssClass: 'alert-style',
+        header: 'Something went wrong.',
+        message: `${e.message}`,
+        buttons: ['Cancel', { text: 'Got It!' }],
+        onDidDismiss: (e) => console.log('Alert Hook dismissed'),
+      });
     }
   };
   return (
@@ -89,7 +123,9 @@ const Home: React.FC = () => {
           ></IonInput>
         </IonItem>
         {loading ? (
-          <IonSpinner />
+          <IonItem className="center margin-top">
+            <IonSpinner />
+          </IonItem>
         ) : (
           <IonButton
             expand="block"
@@ -101,9 +137,9 @@ const Home: React.FC = () => {
           </IonButton>
         )}
 
-        {checked && <div>check function returns? {checked}</div>}
-        {match && <div>we have a match ?{match}</div>}
-        {details && <div>reachabilityDetails ? {details}</div>}
+        {checked && <div>check function returns: {checked}</div>}
+        {match && <div>we have a match? {match === 'true' ? 'Yes' : 'No'}</div>}
+        {details && <div>reachabilityDetails are: {details}</div>}
       </IonContent>
     </IonPage>
   );

@@ -14,3 +14,6 @@
   padding: 10px 30px;
   outline: none;
 }
+.alert-style .alert-wrapper {
+  background: #e5e5e5;
+}
