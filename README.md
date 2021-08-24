@@ -33,7 +33,12 @@ First, start the dev server by running in the root directory,
 tru server -t
 ```
 
-This will start a local development server and give it's URL.
+This will start a local development server and create a tunnel so that your phone application can communicate with the API. 
+
+The `LocalTunnel` URL provided, copy this and update the following values with this URL:
+
+* `capacitor.config.json` has a key: `url:` within the `server:` object, add the value here.
+* `src/Home.tsx` has a constant called `BASE_URL`, add the value here.
 
 To start the Ionic app , first install dependencies via:
 
