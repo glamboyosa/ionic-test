@@ -37,7 +37,6 @@ This will start a local development server and create a tunnel so that your phon
 
 The `LocalTunnel` URL provided, copy this and update the following values with this URL:
 
-- `capacitor.config.json` has a key: `url:` within the `server:` object, add the value here.
 - `src/Home.tsx` has a constant called `BASE_URL`, add the value here.
 
 To start the Ionic app , first install dependencies via:
@@ -47,8 +46,6 @@ npm install
 ```
 
 The SDK is currently on the npm registry as `glamboytest` (for testing purposes)
-
-Update `BASE_URL` in `Home.tsx` to the Localtunnel URL provided.
 
 The next step is to sync the project for Android. In the terminal, run:
 
