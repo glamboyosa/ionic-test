@@ -20,14 +20,17 @@ const Home: React.FC = () => {
   const [match, setMatch] = useState('');
   const [details, setDetails] = useState('');
   const [loading, setLoading] = useState(false);
-  const BASE_URL = 'https://3a97-197-211-58-69.ngrok.io';
+  const BASE_URL = '<YOUR_LOCAL_TUNNEL_URL>';
 
   const submitHandler = async () => {
     const body = JSON.stringify({ phone_number: phoneNumber });
     console.log(body);
     try {
       setLoading(true);
-      const response = await fetch(`${BASE_URL}/api/register`, {
+      const response = await fetch(`${BASE_URL}/phone-check`, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
         method: 'POST',
         body,
       });
@@ -44,7 +47,7 @@ const Home: React.FC = () => {
       setChecked(JSON.stringify(isChecked));
 
       const phoneCheckResponse = await fetch(
-        `${BASE_URL}/api/register?check_id=${resp.data.checkId}`
+        `${BASE_URL}/phone-check?check_id=${resp.data.checkId}`
       );
 
       const phoneCheckResult: { data: { match: boolean } } =
