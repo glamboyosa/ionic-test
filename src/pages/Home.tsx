@@ -58,21 +58,24 @@ const Home: React.FC = () => {
         body,
       });
 
-      const resp: { data: { check_id: string; check_url: string } } =
-        await response.json();
+      const resp: {
+        check_id: string;
+        _links: { check_url: { href: string } };
+      } = await response.json();
 
       console.log('Server response is: ', resp);
 
-      const isChecked = await TruPluginIonicCapacitor.check(
-        resp.data.check_url
-      );
+      const check_url = resp._links.check_url.href;
+      const check_id = resp.check_id;
+
+      const isChecked = await TruPluginIonicCapacitor.check(check_url);
 
       console.log(isChecked);
       console.log('isChecked (check) Result', isChecked.result);
       setChecked(JSON.stringify(isChecked));
 
       const phoneCheckResponse = await fetch(
-        `${BASE_URL}/phone-check?check_id=${resp.data.check_id}`,
+        `${BASE_URL}/phone-check?check_id=${check_id}`,
         {
           headers: {
             'Content-Type': 'application/json',
