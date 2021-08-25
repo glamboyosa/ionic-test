@@ -21,7 +21,7 @@ const Home: React.FC = () => {
   const [match, setMatch] = useState('');
   const [details, setDetails] = useState('');
   const [loading, setLoading] = useState(false);
-  const BASE_URL = '<YOUR_LOCAL)TUNNEL_URL>';
+  const BASE_URL = '<YOUR_NGROK_OR_LOCAL_TUNNEL_URL>';
 
   const [present] = useIonAlert();
 
@@ -55,28 +55,28 @@ const Home: React.FC = () => {
           buttons: ['Cancel', { text: 'Got It!' }],
           onDidDismiss: (e) => console.log('Alert Hook dismissed'),
         });
+
         setDetails('MNO not supported');
         setLoading(false);
         return;
-      } else if (info.error?.status === 412) {
-        present({
-          cssClass: 'alert-style',
-          header: 'Something went wrong.',
-          message: 'Please switch to mobile data.',
-          buttons: ['Cancel', { text: 'Got It!' }],
-          onDidDismiss: (e) => console.log('Alert Hook dismissed'),
-        });
-        setDetails('Please switch to mobile data');
-        setLoading(false);
-        return;
       }
+
       let isPhoneCheckSupported = false;
-      for (const { productType } of info.products!) {
-        console.log('supported products are', productType);
-        if (productType === 'PhoneCheck') {
-          isPhoneCheckSupported = true;
+
+      if (info.error?.status !== 412) {
+        isPhoneCheckSupported = false;
+
+        for (const { productType } of info.products!) {
+          console.log('supported products are', productType);
+
+          if (productType === 'PhoneCheck') {
+            isPhoneCheckSupported = true;
+          }
         }
+      } else {
+        isPhoneCheckSupported = true;
       }
+
       if (!isPhoneCheckSupported) {
         present({
           cssClass: 'alert-style',
