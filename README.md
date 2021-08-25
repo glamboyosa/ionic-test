@@ -33,11 +33,11 @@ First, start the dev server by running in the root directory,
 tru server -t
 ```
 
+> **Note** if you would prefer to use ngrok instead of LocalTunnel, remove the `-t` from the above command, and in another Terminal run the command `ngrok http 8080`.
+
 This will start a local development server and create a tunnel so that your phone application can communicate with the API.
 
-The `LocalTunnel` URL provided, copy this and update the following values with this URL:
-
-- `src/Home.tsx` has a constant called `BASE_URL`, add the value here.
+With the `LocalTunnel` URL (or ngrok URL) provided, copy this value and update the `BASE_URL` value found within `src/pages/Home.tsx`.
 
 To start the Ionic app , first install dependencies via:
 
@@ -45,7 +45,7 @@ To start the Ionic app , first install dependencies via:
 npm install
 ```
 
-The SDK is currently on the npm registry as `glamboytest` (for testing purposes)
+The plugin is currently on the npm registry as `@tru_id/tru-plugin-ionic-capacitor`.
 
 The next step is to sync the project for Android. In the terminal, run:
 
@@ -57,9 +57,13 @@ ionic cap copy
 
 Open the Android folder in Android Studio and let Gradle sync.
 
-Run on your physical device.
+To run on your physical device, enter the following command into your Terminal:
 
-To run on iOS, run the following in the terminal:
+```bash
+ionic capacitor run android -l --external
+```
+
+For iOS, run the following commands in the terminal:
 
 ```bash
 ionic build
@@ -68,4 +72,20 @@ ionic cap sync
 ionic cap copy
 ```
 
+And finally, to run the application on your physical iOS device, run the following command in your Terminal:
+
+```bash
+ionic capacitor run ios --livereload --external
+```
+
 That will generate an ios folder, open it up in XCode and launch on a physical device.
+
+## References
+
+- [**tru.ID** docs](https://developer.tru.id/docs)
+
+## Meta
+
+Distributed under the MIT License. See [LICENSE](/LICENSE)
+
+[**tru.ID**](https://tru.id)
