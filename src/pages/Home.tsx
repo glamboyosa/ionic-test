@@ -21,7 +21,7 @@ const Home: React.FC = () => {
   const [match, setMatch] = useState('');
   const [details, setDetails] = useState('');
   const [loading, setLoading] = useState(false);
-  const BASE_URL = '<YOUR_LOCALTUNNEL_URL>';
+  const BASE_URL = '<YOUR_LOCAL_TUNNEL_URL>';
 
   const [present] = useIonAlert();
 
@@ -58,20 +58,24 @@ const Home: React.FC = () => {
         body,
       });
 
-      const resp: {
-        check_id: string;
-        _links: { check_url: { href: string } };
-      } = await response.json();
+      const resp: { check_id: string; check_url: string } =
+        await response.json();
 
-      console.log('Server response is: ', resp);
+      console.log('Server response is: ', JSON.stringify(resp));
 
-      const check_url = resp._links.check_url.href;
+      const check_url = resp.check_url;
       const check_id = resp.check_id;
 
-      const isChecked = await TruPluginIonicCapacitor.check(check_url);
+      console.log('check url is', check_url);
+
+      console.log('check_id is', check_id);
+
+      const isChecked = await TruPluginIonicCapacitor.check({ url: check_url });
 
       console.log(isChecked);
+
       console.log('isChecked (check) Result', isChecked.result);
+
       setChecked(JSON.stringify(isChecked));
 
       const phoneCheckResponse = await fetch(
@@ -83,17 +87,18 @@ const Home: React.FC = () => {
         }
       );
 
-      const phoneCheckResult: { data: { match: boolean } } =
+      const phoneCheckResult: { match: boolean } =
         await phoneCheckResponse.json();
 
-      console.log('PhoneCheck match', phoneCheckResult.data.match);
-      setMatch(JSON.stringify(phoneCheckResult.data.match));
+      console.log('PhoneCheck match', phoneCheckResult.match);
+      setMatch(JSON.stringify(phoneCheckResult.match));
 
       const reachabilityDetails = await TruPluginIonicCapacitor.isReachable();
 
       console.log('Reachability details are', reachabilityDetails.result);
 
       setDetails(JSON.stringify(reachabilityDetails));
+
       setLoading(false);
     } catch (e) {
       setLoading(false);
@@ -107,6 +112,7 @@ const Home: React.FC = () => {
       });
     }
   };
+
   return (
     <IonPage>
       <IonHeader>
