@@ -55,10 +55,10 @@ const Home: React.FC = () => {
       console.log('Reachability details are', reachabilityDetails.result);
 
       const info: {
-        network_id: string;
-        network_name: string;
-        country_code: string;
-        products?: { product_id: string; product_name: string }[];
+        networkId: string;
+        networkName: string;
+        countryCode: string;
+        products?: { productId: string; productType: string }[];
         error?: {
           type: string;
           title: string;
@@ -76,6 +76,7 @@ const Home: React.FC = () => {
           onDidDismiss: (e) => console.log('Alert Hook dismissed'),
         });
         setDetails('MNO not supported');
+        setLoading(false);
         return;
       } else if (info.error?.status === 412) {
         present({
@@ -86,22 +87,27 @@ const Home: React.FC = () => {
           onDidDismiss: (e) => console.log('Alert Hook dismissed'),
         });
         setDetails('Please switch to mobile data');
+        setLoading(false);
         return;
       }
-
-      for (const { product_name } of info.products!) {
-        console.log('supported products are', product_name);
-        if (product_name !== 'PhoneCheck') {
-          present({
-            cssClass: 'alert-style',
-            header: 'Something went wrong.',
-            message: 'PhoneCheck is not supported on MNO.',
-            buttons: ['Cancel', { text: 'Got It!' }],
-            onDidDismiss: (e) => console.log('Alert Hook dismissed'),
-          });
-          setDetails('PhoneCheck is not supported on MNO');
-          return;
+      let isPhoneCheckSupported = false;
+      for (const { productType } of info.products!) {
+        console.log('supported products are', productType);
+        if (productType === 'PhoneCheck') {
+          isPhoneCheckSupported = true;
         }
+      }
+      if (!isPhoneCheckSupported) {
+        present({
+          cssClass: 'alert-style',
+          header: 'Something went wrong.',
+          message: 'PhoneCheck is not supported on MNO.',
+          buttons: ['Cancel', { text: 'Got It!' }],
+          onDidDismiss: (e) => console.log('Alert Hook dismissed'),
+        });
+        setDetails('PhoneCheck is not supported on MNO');
+        setLoading(false);
+        return;
       }
 
       setDetails(JSON.stringify(reachabilityDetails));
