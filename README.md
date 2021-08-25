@@ -69,7 +69,3 @@ ionic cap copy
 ```
 
 That will generate an ios folder, open it up in XCode and launch on a physical device.
-
-### Note
-
-Please note, Greg, that it may not `fetch` it may say "access to fetch at http://localhost is denied." Basically a CORS issue. If that happens , please just create a server , ideally clone our [Passwordless Registration](https://github.com/tru-ID/passwordless-auth-phonecheck) and add the previously created `tru.json` file to the root and run the server and simply update `BASE_URL` to the ngrok server.

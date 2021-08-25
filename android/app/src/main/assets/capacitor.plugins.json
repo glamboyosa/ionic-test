@@ -16,7 +16,7 @@
 		"classpath": "com.capacitorjs.plugins.statusbar.StatusBarPlugin"
 	},
 	{
-		"pkg": "glamboytest",
+		"pkg": "@tru_id/tru-plugin-ionic-capacitor",
 		"classpath": "com.trupluginioniccapacitor.TruPluginIonicCapacitorPlugin"
 	}
 ]

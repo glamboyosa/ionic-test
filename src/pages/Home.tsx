@@ -10,10 +10,10 @@ import {
   IonSpinner,
   useIonAlert,
 } from '@ionic/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './Home.css';
 
-import { TruPluginIonicCapacitor } from 'glamboytest';
+import { TruPluginIonicCapacitor } from '@tru_id/tru-plugin-ionic-capacitor';
 
 const Home: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -24,26 +24,6 @@ const Home: React.FC = () => {
   const BASE_URL = '<YOUR_LOCAL)TUNNEL_URL>';
 
   const [present] = useIonAlert();
-
-  useEffect(() => {
-    if (match === 'true' && !loading) {
-      present({
-        cssClass: 'alert-style',
-        header: 'Success!',
-        message: 'PhoneCheck Verification successful.',
-        buttons: ['Cancel', { text: 'Got It!' }],
-        onDidDismiss: (e) => console.log('Alert Hook dismissed'),
-      });
-    } else if (match === 'false' && !loading) {
-      present({
-        cssClass: 'alert-style',
-        header: 'Something went wrong.',
-        message: 'PhoneCheck verification unsuccessful.',
-        buttons: ['Cancel', { text: 'Got It!' }],
-        onDidDismiss: (e) => console.log('Alert Hook dismissed'),
-      });
-    }
-  }, [match, present, loading]);
 
   const submitHandler = async () => {
     const body = JSON.stringify({ phone_number: phoneNumber });
@@ -110,7 +90,7 @@ const Home: React.FC = () => {
         return;
       }
 
-      setDetails(JSON.stringify(reachabilityDetails));
+      setDetails(JSON.stringify(isPhoneCheckSupported));
 
       const response = await fetch(`${BASE_URL}/phone-check`, {
         headers: {
@@ -156,6 +136,23 @@ const Home: React.FC = () => {
       setMatch(JSON.stringify(phoneCheckResult.match));
 
       setLoading(false);
+      if (phoneCheckResult.match) {
+        present({
+          cssClass: 'alert-style',
+          header: 'Success!',
+          message: 'PhoneCheck Verification successful.',
+          buttons: ['Cancel', { text: 'Got It!' }],
+          onDidDismiss: (e) => console.log('Alert Hook dismissed'),
+        });
+      } else if (!phoneCheckResult.match) {
+        present({
+          cssClass: 'alert-style',
+          header: 'Something went wrong.',
+          message: 'PhoneCheck verification unsuccessful.',
+          buttons: ['Cancel', { text: 'Got It!' }],
+          onDidDismiss: (e) => console.log('Alert Hook dismissed'),
+        });
+      }
     } catch (e) {
       setLoading(false);
       console.log(JSON.stringify(e));
@@ -204,10 +201,9 @@ const Home: React.FC = () => {
             Submit
           </IonButton>
         )}
-
-        {checked && <div>check function returns: {checked}</div>}
-        {match && <div>we have a match? {match === 'true' ? 'Yes' : 'No'}</div>}
-        {details && <div>reachabilityDetails are: {details}</div>}
+        {details && <div>isReachable? : {details === 'true' ? '✔' : 'No'}</div>}
+        {checked && <div>Check URL opened ✔</div>}
+        {match && <div>We have a match? {match === 'true' ? '✔' : 'No'}</div>}
       </IonContent>
     </IonPage>
   );
