@@ -21,12 +21,12 @@ const Home: React.FC = () => {
   const [match, setMatch] = useState('');
   const [details, setDetails] = useState('');
   const [loading, setLoading] = useState(false);
-  const BASE_URL = '<YOUR_LOCAL_TUNNEL_URL>';
+  const BASE_URL = '<YOUR_LOCAL)TUNNEL_URL>';
 
   const [present] = useIonAlert();
 
   useEffect(() => {
-    if (match === 'true') {
+    if (match === 'true' && !loading) {
       present({
         cssClass: 'alert-style',
         header: 'Success!',
@@ -34,7 +34,7 @@ const Home: React.FC = () => {
         buttons: ['Cancel', { text: 'Got It!' }],
         onDidDismiss: (e) => console.log('Alert Hook dismissed'),
       });
-    } else if (match === 'false') {
+    } else if (match === 'false' && !loading) {
       present({
         cssClass: 'alert-style',
         header: 'Something went wrong.',
@@ -43,13 +43,69 @@ const Home: React.FC = () => {
         onDidDismiss: (e) => console.log('Alert Hook dismissed'),
       });
     }
-  }, [match, present]);
+  }, [match, present, loading]);
 
   const submitHandler = async () => {
     const body = JSON.stringify({ phone_number: phoneNumber });
     console.log(body);
     try {
       setLoading(true);
+      const reachabilityDetails = await TruPluginIonicCapacitor.isReachable();
+
+      console.log('Reachability details are', reachabilityDetails.result);
+
+      const info: {
+        network_id: string;
+        network_name: string;
+        country_code: string;
+        products?: { product_id: string; product_name: string }[];
+        error?: {
+          type: string;
+          title: string;
+          status: number;
+          detail: string;
+        };
+      } = JSON.parse(reachabilityDetails.result);
+
+      if (info.error?.status === 400) {
+        present({
+          cssClass: 'alert-style',
+          header: 'Something went wrong.',
+          message: 'Mobile Operator not supported.',
+          buttons: ['Cancel', { text: 'Got It!' }],
+          onDidDismiss: (e) => console.log('Alert Hook dismissed'),
+        });
+        setDetails('MNO not supported');
+        return;
+      } else if (info.error?.status === 412) {
+        present({
+          cssClass: 'alert-style',
+          header: 'Something went wrong.',
+          message: 'Please switch to mobile data.',
+          buttons: ['Cancel', { text: 'Got It!' }],
+          onDidDismiss: (e) => console.log('Alert Hook dismissed'),
+        });
+        setDetails('Please switch to mobile data');
+        return;
+      }
+
+      for (const { product_name } of info.products!) {
+        console.log('supported products are', product_name);
+        if (product_name !== 'PhoneCheck') {
+          present({
+            cssClass: 'alert-style',
+            header: 'Something went wrong.',
+            message: 'PhoneCheck is not supported on MNO.',
+            buttons: ['Cancel', { text: 'Got It!' }],
+            onDidDismiss: (e) => console.log('Alert Hook dismissed'),
+          });
+          setDetails('PhoneCheck is not supported on MNO');
+          return;
+        }
+      }
+
+      setDetails(JSON.stringify(reachabilityDetails));
+
       const response = await fetch(`${BASE_URL}/phone-check`, {
         headers: {
           'Content-Type': 'application/json',
@@ -93,12 +149,6 @@ const Home: React.FC = () => {
       console.log('PhoneCheck match', phoneCheckResult.match);
       setMatch(JSON.stringify(phoneCheckResult.match));
 
-      const reachabilityDetails = await TruPluginIonicCapacitor.isReachable();
-
-      console.log('Reachability details are', reachabilityDetails.result);
-
-      setDetails(JSON.stringify(reachabilityDetails));
-
       setLoading(false);
     } catch (e) {
       setLoading(false);
@@ -135,9 +185,9 @@ const Home: React.FC = () => {
           ></IonInput>
         </IonItem>
         {loading ? (
-          <IonItem className="center margin-top">
+          <div className="center margin-top">
             <IonSpinner />
-          </IonItem>
+          </div>
         ) : (
           <IonButton
             expand="block"

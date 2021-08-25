@@ -43,6 +43,7 @@ dependencies {
     implementation "androidx.core:core-ktx:+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "com.squareup.okhttp3:okhttp:4.9.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2"
 }
 
 apply from: 'capacitor.build.gradle'
