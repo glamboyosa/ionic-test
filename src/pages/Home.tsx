@@ -9,19 +9,19 @@ import {
   IonToolbar,
   IonSpinner,
   useIonAlert,
-} from '@ionic/react';
-import { useState } from 'react';
-import './Home.css';
+} from "@ionic/react";
+import { useState } from "react";
+import "./Home.css";
 
-import { TruPluginIonicCapacitor } from '@tru_id/tru-plugin-ionic-capacitor';
+import { TruPluginIonicCapacitor } from "@tru_id/tru-plugin-ionic-capacitor";
 
 const Home: React.FC = () => {
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [checked, setChecked] = useState('');
-  const [match, setMatch] = useState('');
-  const [details, setDetails] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [checked, setChecked] = useState("");
+  const [match, setMatch] = useState("");
+  const [details, setDetails] = useState("");
   const [loading, setLoading] = useState(false);
-  const BASE_URL = '<YOUR_NGROK_OR_LOCAL_TUNNEL_URL>';
+  const BASE_URL = "<YOUR_NGROK_OR_LOCAL_TUNNEL_URL>";
 
   const [present] = useIonAlert();
 
@@ -32,7 +32,7 @@ const Home: React.FC = () => {
       setLoading(true);
       const reachabilityDetails = await TruPluginIonicCapacitor.isReachable();
 
-      console.log('Reachability details are', reachabilityDetails.result);
+      console.log("Reachability details are", reachabilityDetails.result);
 
       const info: {
         networkId: string;
@@ -49,14 +49,14 @@ const Home: React.FC = () => {
 
       if (info.error?.status === 400) {
         present({
-          cssClass: 'alert-style',
-          header: 'Something went wrong.',
-          message: 'Mobile Operator not supported.',
-          buttons: ['Cancel', { text: 'Got It!' }],
-          onDidDismiss: (e) => console.log('Alert Hook dismissed'),
+          cssClass: "alert-style",
+          header: "Something went wrong.",
+          message: "Mobile Operator not supported.",
+          buttons: ["Cancel", { text: "Got It!" }],
+          onDidDismiss: (e) => console.log("Alert Hook dismissed"),
         });
 
-        setDetails('MNO not supported');
+        setDetails("MNO not supported");
         setLoading(false);
         return;
       }
@@ -67,9 +67,9 @@ const Home: React.FC = () => {
         isPhoneCheckSupported = false;
 
         for (const { productType } of info.products!) {
-          console.log('supported products are', productType);
+          console.log("supported products are", productType);
 
-          if (productType === 'PhoneCheck') {
+          if (productType === "PhoneCheck") {
             isPhoneCheckSupported = true;
           }
         }
@@ -79,13 +79,13 @@ const Home: React.FC = () => {
 
       if (!isPhoneCheckSupported) {
         present({
-          cssClass: 'alert-style',
-          header: 'Something went wrong.',
-          message: 'PhoneCheck is not supported on MNO.',
-          buttons: ['Cancel', { text: 'Got It!' }],
-          onDidDismiss: (e) => console.log('Alert Hook dismissed'),
+          cssClass: "alert-style",
+          header: "Something went wrong.",
+          message: "PhoneCheck is not supported on MNO.",
+          buttons: ["Cancel", { text: "Got It!" }],
+          onDidDismiss: (e) => console.log("Alert Hook dismissed"),
         });
-        setDetails('PhoneCheck is not supported on MNO');
+        setDetails("PhoneCheck is not supported on MNO");
         setLoading(false);
         return;
       }
@@ -94,29 +94,29 @@ const Home: React.FC = () => {
 
       const response = await fetch(`${BASE_URL}/phone-check`, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        method: 'POST',
+        method: "POST",
         body,
       });
 
       const resp: { check_id: string; check_url: string } =
         await response.json();
 
-      console.log('Server response is: ', JSON.stringify(resp));
+      console.log("Server response is: ", JSON.stringify(resp));
 
       const check_url = resp.check_url;
       const check_id = resp.check_id;
 
-      console.log('check url is', check_url);
+      console.log("check url is", check_url);
 
-      console.log('check_id is', check_id);
+      console.log("check_id is", check_id);
 
       const isChecked = await TruPluginIonicCapacitor.check({ url: check_url });
 
       console.log(isChecked);
 
-      console.log('isChecked (check) Result', isChecked.result);
+      console.log("isChecked (check) Result", isChecked.result);
 
       setChecked(JSON.stringify(isChecked));
 
@@ -124,7 +124,7 @@ const Home: React.FC = () => {
         `${BASE_URL}/phone-check?check_id=${check_id}`,
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         }
       );
@@ -132,36 +132,36 @@ const Home: React.FC = () => {
       const phoneCheckResult: { match: boolean } =
         await phoneCheckResponse.json();
 
-      console.log('PhoneCheck match', phoneCheckResult.match);
+      console.log("PhoneCheck match", phoneCheckResult.match);
       setMatch(JSON.stringify(phoneCheckResult.match));
 
       setLoading(false);
       if (phoneCheckResult.match) {
         present({
-          cssClass: 'alert-style',
-          header: 'Success!',
-          message: 'PhoneCheck Verification successful.',
-          buttons: ['Cancel', { text: 'Got It!' }],
-          onDidDismiss: (e) => console.log('Alert Hook dismissed'),
+          cssClass: "alert-style",
+          header: "Success!",
+          message: "PhoneCheck Verification successful.",
+          buttons: ["Cancel", { text: "Got It!" }],
+          onDidDismiss: (e) => console.log("Alert Hook dismissed"),
         });
       } else if (!phoneCheckResult.match) {
         present({
-          cssClass: 'alert-style',
-          header: 'Something went wrong.',
-          message: 'PhoneCheck verification unsuccessful.',
-          buttons: ['Cancel', { text: 'Got It!' }],
-          onDidDismiss: (e) => console.log('Alert Hook dismissed'),
+          cssClass: "alert-style",
+          header: "Something went wrong.",
+          message: "PhoneCheck verification unsuccessful.",
+          buttons: ["Cancel", { text: "Got It!" }],
+          onDidDismiss: (e) => console.log("Alert Hook dismissed"),
         });
       }
-    } catch (e) {
+    } catch (e: any) {
       setLoading(false);
       console.log(JSON.stringify(e));
       present({
-        cssClass: 'alert-style',
-        header: 'Something went wrong.',
+        cssClass: "alert-style",
+        header: "Something went wrong.",
         message: `${e.message}`,
-        buttons: ['Cancel', { text: 'Got It!' }],
-        onDidDismiss: (e) => console.log('Alert Hook dismissed'),
+        buttons: ["Cancel", { text: "Got It!" }],
+        onDidDismiss: (e) => console.log("Alert Hook dismissed"),
       });
     }
   };
@@ -201,9 +201,9 @@ const Home: React.FC = () => {
             Submit
           </IonButton>
         )}
-        {details && <div>isReachable? : {details === 'true' ? '✔' : 'No'}</div>}
+        {details && <div>isReachable? : {details === "true" ? "✔" : "No"}</div>}
         {checked && <div>Check URL opened ✔</div>}
-        {match && <div>We have a match? {match === 'true' ? '✔' : 'No'}</div>}
+        {match && <div>We have a match? {match === "true" ? "✔" : "No"}</div>}
       </IonContent>
     </IonPage>
   );
