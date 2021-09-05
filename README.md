@@ -4,7 +4,9 @@
 
 - A physical Android or iOS mobile phone.
 - [Ionic Tooling](https://ionicframework.com/docs/react/your-first-app#install-ionic-tooling)
-
+- [Android Studio](https://developer.android.com/studio) 
+- [XCode >=12](https://developer.apple.com/xcode/resources/) 
+- JDK >=8
 Clone the repo via:
 
 ```bash
