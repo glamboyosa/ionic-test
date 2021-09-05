@@ -11,6 +11,15 @@ Clone the repo via:
 git clone https://github.com/tru-ID/ionic-plugin-example-app.git
 ```
 
+The [**tru.ID** CLI](https://github.com/tru-ID/tru-cli) will allow you to input and store your credentials for your account; it'll also allow you to create a **tru.ID** project for your application. In your Terminal, install the CLI with the following command:
+
+```bash
+npm install -g @tru_id/cli
+```
+
+Set up the CLI with your **tru.ID** credentials, which you can find within the tru.ID [console](https://developer.tru.id/console).
+
+
 Create a new tru.ID project in the root directory via:
 
 ```bash
