@@ -22,7 +22,7 @@ const Home: React.FC = () => {
   const [details, setDetails] = useState("");
   const [loading, setLoading] = useState(false);
   const BASE_URL = "<YOUR_NGROK_OR_LOCAL_TUNNEL_URL>";
-
+  
   const [present] = useIonAlert();
 
   const submitHandler = async () => {
