@@ -1874,10 +1874,10 @@
   resolved "https://registry.npmjs.org/@tootallnate/once/-/once-1.1.2.tgz"
   integrity sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==
 
-"@tru_id/tru-plugin-ionic-capacitor@0.0.8":
-  version "0.0.8"
-  resolved "https://registry.npmjs.org/@tru_id/tru-plugin-ionic-capacitor/-/tru-plugin-ionic-capacitor-0.0.8.tgz"
-  integrity sha512-hleqgFlW8ZL1+Yq1oHPPZ5wEeUGae2rmytisyCgvQmMz91K7uEmH0rVU07g4iWICqNq9OZda67bK+dRMI3jM0Q==
+"@tru_id/tru-plugin-ionic-capacitor@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@tru_id/tru-plugin-ionic-capacitor/-/tru-plugin-ionic-capacitor-0.0.9.tgz#c9526a0f4a8cbc838507bed630314346204715bf"
+  integrity sha512-rt0sey8Ld9Qrd0F4+gKh0I5kJw8ECoa/iMhVqpWVQf4mfBvBPcWQnffdL2DZ8zknZsS06YvSFayTqA8YEpu1ow==
 
 "@types/aria-query@^4.2.0":
   version "4.2.2"
