@@ -35,10 +35,10 @@ const Home: React.FC = () => {
       console.log("Reachability details are", reachabilityDetails.result);
 
       const info: {
-        networkId: string;
-        networkName: string;
-        countryCode: string;
-        products?: { productId: string; productType: string }[];
+        network_id: string;
+        network_name: string;
+        country_code: string;
+        products?: { product_id: string; product_name: string }[];
         error?: {
           type: string;
           title: string;
@@ -66,10 +66,10 @@ const Home: React.FC = () => {
       if (info.error?.status !== 412) {
         isPhoneCheckSupported = false;
 
-        for (const { productType } of info.products!) {
-          console.log("supported products are", productType);
+        for (const { product_name } of info.products!) {
+          console.log("supported products are", product_name);
 
-          if (productType === "PhoneCheck") {
+          if (product_name === "Phone Check") {
             isPhoneCheckSupported = true;
           }
         }
